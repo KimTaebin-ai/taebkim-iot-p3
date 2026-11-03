@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wil-playground
+  namespace: dev
+  labels:
+    app: wil-playground
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wil-playground
+  template:
+    metadata:
+      labels:
+        app: wil-playground
+    spec:
+      containers:
+        - image: wil42/playground:v1
+          name: wil-playground
+          ports:
+            - name: http
+              containerPort: 8888
+          # 교체 중 아직 listen하지 않는 pod로 트래픽이 가지 않게 한다
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 2
